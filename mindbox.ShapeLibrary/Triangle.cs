@@ -1,44 +1,40 @@
-﻿namespace mindbox.ShapeLibrary;
+﻿using System.Security.Cryptography.X509Certificates;
 
-/// <summary>
-/// Represents the shape of a triangle
-/// </summary>
-/// <exception cref="ArgumentException"></exception>
-public class Triangle : Shape
+namespace mindbox.ShapeLibrary;
+
+public class Triangle(double a, double b, double c) : IShape
 {
-    double _sideA, _sideB, _sideC;
-    public double SideA
+    public double A { get; set; } = a;
+    public double B { get; set; } = b;
+    public double C { get; set; } = c;
+
+    public double GetSquare()
     {
-        get => _sideA;
-        init => _sideA = ChackGreaterThanZero(value);
-    }
-    public double SideB
-    {
-        get => _sideB;
-        init => _sideB = ChackGreaterThanZero(value);
-    }
-    public double SideC
-    {
-        get => _sideC;
-        init => _sideC = ChackGreaterThanZero(value);
-    }
-    double ChackGreaterThanZero(double value)
-    {
-        if (value <= 0)
-            throw new ArgumentException("The sides of a triangle cannot be less than or equal to zero");
-        return value;
+        if (!IsExist()) return 0;
+
+        return GetSuareByHeron(A, B, C);
     }
 
-    public Triangle(double sideA, double sideB, double sideC)
+    public bool IsExist() => A + B > C && B + C > A && A + C > B;
+
+    public bool IsRectangular()
     {
-        SideA = sideA;
-        SideB = sideB;
-        SideC = sideC;
+        if (A * A + B * B == C * C)
+            return true;
+        if (B * B + C * C == A * A)
+        {
+            (C, A) = (A, C);
+            return true;
+        }
+        if (A * A + C * C == B * B)
+        {
+            (B, C) = (C, B);
+            return true;
+        }
+        return false;
     }
 
-    public sealed override double GetSquare() => GetSuareByHeron(SideA, SideB, SideC);
-
-    internal static double GetSuareByHeron(double a, double b, double c)
+    private static double GetSuareByHeron(double a, double b, double c)
     {
         double p = (a + b + c) / 2;
         return Math.Sqrt(p * (p - a) * (p - b) * (p - c));
