@@ -1,6 +1,4 @@
-﻿using System.Transactions;
-
-namespace mindbox.ShapeLibrary;
+﻿namespace mindbox.ShapeLibrary;
 
 public class Circle(double length, Circle.SquareMode paramType = Circle.SquareMode.Radius) : IShape
 {
@@ -21,15 +19,16 @@ public class Circle(double length, Circle.SquareMode paramType = Circle.SquareMo
         _ => throw new NotImplementedException(),
     };
 
-    private static double GetSquareByRadius(double radius) => 
-        Math.PI * Math.Pow(radius, 2);
+    public bool IsExist() => Length != 0;
+    #region fomulas for find square
+    private static double GetSquareByRadius(double radius) => Math.PI * Math.Pow(radius, 2);
 
-    private static double GetSquareByDiameter(double diameter) => 
-        1 / 4 * Math.PI * Math.Pow(diameter, 2);
+    private static double GetSquareByDiameter(double diameter) => Math.PI * Math.Pow(diameter, 2) / 4d;
 
     private static double GetSquareByPerimeter(double perimeter)
     {
         if (perimeter == 0) return 0;
         return Math.Pow(perimeter, 2) / 4 * Math.PI;
     }
+    #endregion
 }
